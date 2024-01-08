@@ -102,6 +102,13 @@ function handleImgClick(evt) {
 
   /* ------------------- Додаю модальне вікно  -------------------*/
 
+     const closeModal = (evt) => {
+    if (evt.code === "Escape") {
+      instance.close();
+    }
+      return;
+  };
+    
   const instance = basicLightbox.create(`
 <img
           class="big-image"
@@ -119,12 +126,6 @@ function handleImgClick(evt) {
   );
   instance.show();
 
-  const closeModal = (evt) => {
-    if (evt.code === "Escape") {
-      instance.close();
-    }
-      return;
-  };
 }
 
 /* -------------------- Додаю стилі ----------------- */
