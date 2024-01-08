@@ -71,8 +71,9 @@ description — текстовий опис зображення, для атр�
 const container = document.querySelector(".gallery");
 
 function createMarkup(arr) {
-  return arr.map(({preview, original, description }) => {
-  return `<li class="gallery-item">
+  return arr
+    .map(({ preview, original, description }) => {
+      return `<li class="gallery-item">
       <a class="gallery-link" href="large-image.jpg">
         <img
           class="gallery-image"
@@ -81,8 +82,9 @@ function createMarkup(arr) {
           alt="${description}"
         />
       </a>
-    </li>`
-   }).join(''); 
+    </li>`;
+    })
+    .join("");
 }
 
 container.innerHTML = createMarkup(images);
@@ -90,50 +92,58 @@ container.innerHTML = createMarkup(images);
 container.addEventListener("click", handleImgClick);
 
 function handleImgClick(evt) {
-    evt.preventDefault();
+  evt.preventDefault();
 
-    if (evt.target === evt.currentTarget) {
-        return
-    }
+  if (evt.target === evt.currentTarget) {
+    return;
+  }
 
-    console.log(evt.target.dataset.source);
+  console.log(evt.target.dataset.source);
 
-    /* Додаю модальне вікно */
+  /* ------------------- Додаю модальне вікно  -------------------*/
 
-    const closeModal = (evt) => {  
-        if (evt.code === "Escape") {
-            instance.close();
-        }
-    }
-
-    const instance = basicLightbox.create(`
+  const instance = basicLightbox.create(`
 <img
           class="big-image"
           src="${evt.target.dataset.source}"
         />
-`) 
-    instance.show();  
-    
+`,
+      {
+          onShow: (instance) => {
+              document.addEventListener("keydown", closeModal);
+          },
+           onClose: (instance) => {
+              document.removeEventListener("keydown", closeModal);
+            }
+      },
+  );
+  instance.show();
+
+  const closeModal = (evt) => {
+    if (evt.code === "Escape") {
+      instance.close();
+    }
+      return;
+  };
 }
 
-/* Додаю стилі */
+/* -------------------- Додаю стилі ----------------- */
 
 const items = document.querySelectorAll(".gallery-item");
 
-items.forEach(item => {
- item.style.maxWidth = "360px";
-    item.style.marginTop = "15px";
-    item.style.marginRight = "15px";
+items.forEach((item) => {
+  item.style.maxWidth = "360px";
+  item.style.marginTop = "15px";
+  item.style.marginRight = "15px";
 
-    return
-})
+  return;
+});
 
 const pictures = document.querySelectorAll(".gallery-image");
 
-pictures.forEach(img => {
+pictures.forEach((img) => {
   img.style.maxWidth = "100%";
   img.style.maxHeight = "100%";
-  
 });
 
 container.style.display = "flex";
@@ -141,4 +151,3 @@ container.style.flexWrap = "wrap";
 container.style.listStyleType = "none";
 container.style.justifyContent = "center";
 container.style.alignItems = "center";
-
